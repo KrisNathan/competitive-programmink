@@ -56,7 +56,7 @@ iostream with sync_with_stdio(false):    5.5 seconds
 ```
 
 - Use `sync_with_stdio(false)` in competitive programming or performance-critical applications where you only use C++ I/O (cin, cout) and need faster execution.
-- Avoid it if you need to mix C++ and C I/O functions or require thread-safe I/O operations. (YOU CAN'T USE IT WITH C IO FUNCTIONS LIKE SCANF OR PRINTF)
+- Avoid it if you need to mix C++ and C I/O functions or require thread-safe I/O operations. (**YOU CAN'T USE IT WITH C IO FUNCTIONS LIKE SCANF OR PRINTF**)
 
 ### Untie `cin`
 
