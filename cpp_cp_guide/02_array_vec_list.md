@@ -34,9 +34,11 @@ Avoid if:
 1. If you need something that supports *infinite* (a lot, but unknown) length -> use `list`.
 2. Inserting or deleting in the middle (`vector` is an array behind the scenes; would shift every single element O(n)) -> use `list`
 
-## Predefined size
+## Known Max Size
 
-If you know the size beforehand, you *should use arrays* or do this:
+If you know the expected required max size beforehand, you *should use arrays* or do this:
+
+### Vector Constructor
 
 You need the values to be initialized:
 
@@ -46,6 +48,8 @@ std::vector<int> vec2(5, 1); // Creates a vector of size 5, all elements initial
 vec.size() // 5
 ```
 
+### Vector Reserve
+
 You just need it to allocate memory beforehand (to prevent slow allocations during runtime):
 
 ```cpp
@@ -53,6 +57,12 @@ std::vector<int> vec;
 vec.reserve(5); // reserve size 5, doesn't initialize
 vec.size() // still 0
 ```
+
+> Refrain from calling .reserve inside loops!
+> 
+> Also refrain from calling .reserve when making libraries that handle external vector references!
+> 
+> https://youtu.be/algDLvbl1YY?si=tzCHB1l89hpSlemj
 
 
 # List
