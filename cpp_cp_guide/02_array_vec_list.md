@@ -38,9 +38,20 @@ Avoid if:
 
 If you know the size beforehand, you *should use arrays* or do this:
 
+You need the values to be initialized:
+
 ```cpp
 std::vector<int> vec(5); // Creates a vector of size 5, all elements initialized to 0
 std::vector<int> vec2(5, 1); // Creates a vector of size 5, all elements initialized to 1
+vec.size() // 5
+```
+
+You just need it to allocate memory beforehand (to prevent slow allocations during runtime):
+
+```cpp
+std::vector<int> vec;
+vec.reserve(5); // reserve size 5, doesn't initialize
+vec.size() // still 0
 ```
 
 
