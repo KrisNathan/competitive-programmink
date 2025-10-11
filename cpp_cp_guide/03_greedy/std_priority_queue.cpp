@@ -34,6 +34,29 @@ void min_queue_example() {
   std::cout << '\n';
 }
 
+/**
+ * This should be Avoided.
+ * Reallocations happen rarely enough that it evens out in the long run (ammortized time complexity)
+ * Doing this sometimes causes the peak memory footprint to balloon unpredictably.
+ */
+void max_queue_reserved_example() {
+  std::vector<int> container;
+  container.reserve(4);
+  std::priority_queue<int> max_queue(std::less<int>(), std::move(container));
+
+  max_queue.push(5);
+  max_queue.push(3);
+  max_queue.push(7);
+  max_queue.push(1);
+
+  while (!max_queue.empty()) {
+    int v = max_queue.top();
+    max_queue.pop();
+    std::cout << v << ' ';
+  }
+  std::cout << '\n';
+}
+
 struct Item {
   int value;
   int weight;
