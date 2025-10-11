@@ -3,6 +3,7 @@
 
 // It retains the original time, but sometimes worse memory peak.
 // Not sure why vector container causes 100-200KB peaks.
+// It probably is because of compiler behaviour (it struggling to optimize it maybe)
 
 #include <cstdio>
 #include <queue>
