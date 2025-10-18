@@ -1,3 +1,5 @@
+// Everything is 1-indexed (except strings themselves)
+
 #include <cstdio>
 #include <string>
 #include <vector>
