@@ -6,6 +6,7 @@ Most fundamental instruction for a program that solves competitive programming p
 ## Reading List
 
 1. https://stackoverflow.com/questions/1042110/using-scanf-in-c-programs-is-faster-than-using-cin
+2. https://stackoverflow.com/questions/213907/stdendl-vs-n
 
 
 ## You should use cstdio instead of iostream. (If you need to type faster)
@@ -28,6 +29,10 @@ Why is this?
 - However, this synchronization introduces overhead, making I/O operations slower.
 
 ## Making iostream faster
+
+Before proceeding:
+1. `cstdio`'s `printf` and `scanf` is still more efficient memory wise for competitive programming problems
+2. `cin` and `cout` is only very slightly faster (few ms) with tweaks
 
 ### iostream can be faster with by disabling `sync_with_stdio`
 
@@ -65,3 +70,35 @@ std::cin.tie(nullptr);
 ```
 
 The `cin.tie(nullptr)` detaches cin from cout, preventing automatic flushing of cout before cin operations, further improving performance.
+
+### Avoid `endl`
+
+At first glance, `std::endl` is just a neat newline. But it isn't just a newline character.
+When you use it with `std::cin` it also flushes the buffer.
+Often calling `cin` with `endl` can incur some unnecessary performance penalty due to frequent buffer flushing.
+
+```cpp
+std::cout << std::endl;
+```
+
+is equivalent to
+
+```cpp
+std::cout << '\n' << std::flush;
+```
+
+So if possible just use `'\n'`.
+
+### Avoid overusing the `<<` operator
+
+If you can do this:
+
+```cpp
+std::cout << "Hello\n";
+```
+
+Don't even use this:
+
+```cpp
+std::cout << "Hello" << std::endl;
+```
