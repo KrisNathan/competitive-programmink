@@ -1,30 +1,49 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-vector<vector<int>> mem;
-vector<vector<int>> choice;
+struct State {
+  int w;
+  int v;
+  vector<int> items;
+  bool computed = false;
 
-int solve(int i, int capacity, vector<int> &weights, vector<int> &values) {
+  bool operator<(const State &r) {
+    if (v != r.v)
+      return v < r.v;
+    if (w != r.w)
+      return w > r.w;
+    return items.size() < r.items.size();
+  }
+};
+
+vector<vector<State>> mem;
+
+State solve(int i, int capacity, vector<int> &weights, vector<int> &values) {
   if (i < 0 || capacity == 0)
-    return 0;
+    return {0, 0, {}, true};
 
-  if (mem[i][capacity] != -1) {
+  if (mem[i][capacity].computed) {
     return mem[i][capacity];
   }
 
-  int best = solve(i - 1, capacity, weights, values); // dont take
-  choice[i][capacity] = 0;
+  State best = solve(i - 1, capacity, weights, values); // dont take
+
   if (capacity >= weights[i]) { // take current
-    int take = solve(i - 1, capacity - weights[i], weights, values) + values[i];
-    if (take > best) {
+    State take = solve(i - 1, capacity - weights[i], weights, values);
+    take.w += weights[i];
+    take.v += values[i];
+    take.items.push_back(i); // 0-indexed
+
+    if (best < take) {
       best = take;
-      choice[i][capacity] = 1;
     }
   }
 
   mem[i][capacity] = best;
+  mem[i][capacity].computed = true;
   return best;
 }
 
@@ -36,8 +55,7 @@ int main() {
       k; // stone count
   cin >> n >> k;
 
-  mem = vector<vector<int>>(k, vector<int>(n + 1, -1));
-  choice = vector<vector<int>>(k, vector<int>(n + 1, 0));
+  mem = vector<vector<State>>(k, vector<State>(n + 1, {0, 0, {}}));
 
   vector<int> weights(k);
   vector<int> values(k);
@@ -45,21 +63,14 @@ int main() {
     cin >> weights[i] >> values[i];
   }
 
-  
-  solve(k - 1, n, weights, values);
+  auto res = solve(k - 1, n, weights, values);
 
-  vector<int> takeidx;
-  int remaining = n;
-  for (int i = k - 1; i >= 0; --i) {
-    if (remaining >= 0 && choice[i][remaining]) {
-      takeidx.push_back(i);
-      remaining -= weights[i];
-    }
-  }
-  sort(takeidx.begin(), takeidx.end());
+  // cout << res.v << '\n';
 
-  for (auto &idx : takeidx)
-    cout << idx+1 << '\n';
+  sort(res.items.begin(), res.items.end());
+
+  for (auto &idx : res.items)
+    cout << idx + 1 << '\n'; // 1-indexed
 
   return 0;
 }
